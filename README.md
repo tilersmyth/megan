@@ -10,10 +10,10 @@ ___
 > Combining the awesome frontend repo, [Angular Starter](https://github.com/gdi2290/angular-starter), with the awesome backend repo, [express-mongoose-es6-rest-api](https://github.com/KunalKapadia/express-mongoose-es6-rest-api), and throwing in some [GraphQL](http://graphql.org/) magic to create a modern full-stack starter. 
 
 This README will be updated soon, but here a few noteworthy points about this repo:
-* [Docker](https://www.docker.com/) is used run this project and keep everything working in harmony.  
+* [Docker](https://www.docker.com/) is used to run this project and keep everything working in harmony.  
 * The frontend is served via [NGINX](https://www.nginx.com/) reverse proxy.
 * [GraphQL](http://graphql.org/) is used as the API query language.
-* A simple user authentication example has been included.
+* Simple user authentication is included.
 * More to come soon...
 
 
@@ -32,7 +32,7 @@ cd megan/client
 npm install
 
 # move into project's server directory
-cd ../megan/server
+cd ../server
 
 # install backend dependencies
 yarn
@@ -47,9 +47,11 @@ cd ..
 docker-compose up --build
 
 ```
+go to [http://localhost](http://localhost) in your browser
+
 ___
 
-Again, credit goes to [Angular Starter](https://github.com/gdi2290/angular-starter) and [express-mongoose-es6-rest-api](https://github.com/KunalKapadia/express-mongoose-es6-rest-api) for the great foundation to this project.
+Again, credit goes to [Angular Starter](https://github.com/gdi2290/angular-starter) and [express-mongoose-es6-rest-api](https://github.com/KunalKapadia/express-mongoose-es6-rest-api) for the great foundation that this project is built upon.
 
 ___
 

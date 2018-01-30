@@ -6,6 +6,7 @@ services:
     build: ./client
     volumes:
       - ./client:/usr/src/app
+      - /usr/src/app/node_modules/
     ports:
       - "3000:3000"
  
@@ -15,7 +16,7 @@ services:
     # Map Nginx port 80 to local port 80
     ports:
       - "80:80"
-    # Link for Nginx access
+    # Link client for Nginx access
     links:
       - client
 
