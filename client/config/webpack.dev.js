@@ -148,8 +148,8 @@ module.exports = function (options) {
       historyApiFallback: true,
       watchOptions: {
         // if you're using Docker you may need this
-        // aggregateTimeout: 300,
-        // poll: 1000,
+        aggregateTimeout: 300,
+        poll: 1000,
         ignored: /node_modules/
       },
       /**

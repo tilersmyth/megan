@@ -1,0 +1,43 @@
+version: '3'
+services:
+ 
+  # Frontend
+  client:
+    build: ./client
+    volumes:
+      - ./client:/usr/src/app
+    ports:
+      - "3000:3000"
+ 
+  # Reverse proxy
+  nginx:
+    build: ./nginx
+    # Map Nginx port 80 to local port 80
+    ports:
+      - "80:80"
+    # Link for Nginx access
+    links:
+      - client
+
+  # Backend
+  server:
+    build:
+      context: ./server
+    volumes:
+      - ./server:/app
+      - /app/node_modules/
+    ports:
+      - "4040:4040"
+    env_file:
+      - ./server/.env
+    environment:
+      - MONGO_HOST=mongodb://mongo/meanish
+      - DEBUG=server:*
+    links:
+      - mongo
+
+  # DB
+  mongo:
+    image: "mongo:3.4.2"
+    ports:
+      - "27017:27017"

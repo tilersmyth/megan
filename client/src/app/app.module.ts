@@ -5,6 +5,9 @@ import { HttpClientModule } from '@angular/common/http';
 import { RouterModule, PreloadAllModules } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+//GraphQL
+import {GraphQLModule} from './apollo.config';
+
 /*
  * Platform and Environment providers/directives/pipes
  */
@@ -55,6 +58,7 @@ type StoreType = {
     BrowserAnimationsModule,
     FormsModule,
     HttpClientModule,
+    GraphQLModule,
     RouterModule.forRoot(ROUTES, {
       useHash: Boolean(history.pushState) === false,
       preloadingStrategy: PreloadAllModules
