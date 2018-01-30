@@ -30,7 +30,14 @@ form{
             }
         }
 
-    }    
-   
+    }
 
+    .error{
+        background-color: #E35354;
+        padding: 10px;
+        color: #ffffff;
+        width: 300px;
+        margin-bottom: 20px;
+    }
+   
 }

@@ -14,6 +14,10 @@
         <input placeholder="Confirm password" type="password" name="passwordConfirm" formControlName="passwordConfirm">
     </div>
 
+    <div class="error" *ngIf="error.message">
+        {{error.message}}
+    </div>
+
     <div class="form-control">
         <button type="submit">Sign up</button>
     </div>

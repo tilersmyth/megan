@@ -23,7 +23,7 @@ export class LoginComponent {
     Validators.minLength(3)]); 
 
   public submitted: boolean = false;
-  public errors: any = {};
+  public error: any = {};
 
   constructor(
     private _router: Router,
@@ -38,6 +38,8 @@ export class LoginComponent {
 
   login(model: User, isValid: boolean) {
 
+    this.error = {};
+
     if(!isValid) return;
 
     this._authService.login(model.email, model.password).subscribe(
@@ -46,7 +48,7 @@ export class LoginComponent {
         this._router.navigateByUrl('/');
       },
       (err) => {
-        console.log(err);
+        this.error = err.graphQLErrors[0];
       }
     );
     

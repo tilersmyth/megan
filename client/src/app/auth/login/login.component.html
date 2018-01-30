@@ -10,6 +10,10 @@
         <input placeholder="Password" type="password" name="password" formControlName="password">
     </div>
 
+    <div class="error" *ngIf="error.message">
+        {{error.message}}
+    </div>
+
     <div class="form-control">
         <button type="submit">Login</button>
     </div>

@@ -26,7 +26,7 @@ export class SignupComponent {
     Validators.minLength(3)]);   
 
   public submitted: boolean = false;
-  public errors: any = {};
+  public error: any = {};
 
   constructor(
     private router: Router,
@@ -51,6 +51,8 @@ export class SignupComponent {
 
   signup(model: User, isValid: boolean) {
 
+    this.error = {};
+
     if(!isValid) return;
 
     this._authService.signup(model.email, model.password).subscribe(
@@ -59,7 +61,7 @@ export class SignupComponent {
         this.router.navigateByUrl('/');
       },
       (err) => {
-        console.log(err);
+        this.error = err.graphQLErrors[0];
       }
     );
     
