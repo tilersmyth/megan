@@ -1,0 +1,21 @@
+<h1>Signup</h1>
+
+<form [formGroup]="signupForm" (ngSubmit)="signup(signupForm.value, signupForm.valid)" novalidate>
+
+    <div class="form-control">
+        <input placeholder="E-mail" type="email" name="email" formControlName="email">
+    </div>
+
+    <div class="form-control">
+        <input placeholder="Password" type="password" name="password" formControlName="password">
+    </div>
+
+    <div class="form-control">
+        <input placeholder="Confirm password" type="password" name="passwordConfirm" formControlName="passwordConfirm">
+    </div>
+
+    <div class="form-control">
+        <button type="submit">Sign up</button>
+    </div>
+    
+</form>

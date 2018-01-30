@@ -1,3 +1,4 @@
+import polyfill from 'babel-polyfill'; // eslint-disable-line
 import mongoose from 'mongoose';
 import util from 'util';
 

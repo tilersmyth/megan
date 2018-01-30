@@ -1,0 +1,36 @@
+@import '../../../styles/variables';
+
+form{
+
+    .form-control{
+
+        margin-bottom: 25px;
+
+        >input, button{
+            line-height: 2em;
+            font-size: 16px;
+            min-width: 300px;
+            padding: 10px;
+    
+            &:focus{
+                outline: none;
+            }
+        }
+
+        button{
+            width: 320px;
+            background-color: $nav-button-color;
+            color: white;
+            &:hover{
+                cursor: pointer;
+                background-color: darken( $nav-button-color, 5% );
+            }
+            &:active{
+                background-color: darken( $nav-button-color, 10% );
+            }
+        }
+
+    }    
+   
+
+}

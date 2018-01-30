@@ -6,3 +6,8 @@ html, body{
 a.active {
   background-color: gray;
 }
+
+
+.nav-right{
+  float: right;
+}

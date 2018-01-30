@@ -2,8 +2,14 @@
  * Angular 2 decorators and services
  */
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Router } from "@angular/router";
 import { environment } from 'environments/environment';
 import { AppState } from './app.service';
+
+import {
+  User,
+  AuthService
+} from './shared';
 
 /**
  * App Component
@@ -41,6 +47,25 @@ import { AppState } from './app.service';
          routerLinkActive="active" [routerLinkActiveOptions]= "{exact: true}">
         DevModule
       </a>
+
+      <div class="nav-right" *ngIf="!authService.isLoggedIn">
+        <a [routerLink]=" ['./signup'] "
+          routerLinkActive="active" [routerLinkActiveOptions]= "{exact: true}">
+          Sign up
+        </a>
+        <a [routerLink]=" ['./login'] "
+          routerLinkActive="active" [routerLinkActiveOptions]= "{exact: true}">
+          Login
+        </a>
+      </div>
+
+      <div class="nav-right" *ngIf="authService.isLoggedIn">
+        <a href="javascript:;" (click)="logout()"
+          routerLinkActive="active" [routerLinkActiveOptions]= "{exact: true}">
+          Logout {{currentUser.email}}
+        </a>
+      </div>
+
     </nav>
 
     <main>
@@ -66,12 +91,26 @@ export class AppComponent implements OnInit {
   public url = 'https://tipe.io';
   public showDevModule: boolean = environment.showDevModule;
 
+  public currentUser: User = new User();
+
   constructor(
-    public appState: AppState
-  ) {}
+    public appState: AppState,
+    public authService: AuthService,
+    private _router: Router
+  ) {
+    authService.currentUser.subscribe(
+      (user) => this.currentUser = user,
+      (err) => console.log(err)
+    )
+  }
 
   public ngOnInit() {
     console.log('Initial App State', this.appState.state);
+  }
+
+  public logout(){
+    this.authService.logout();
+    this._router.navigateByUrl('/login');
   }
 
 }

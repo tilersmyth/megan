@@ -1,0 +1,17 @@
+<h1>Login</h1>
+
+<form [formGroup]="loginForm" (ngSubmit)="login(loginForm.value, loginForm.valid)" novalidate>
+
+    <div class="form-control">
+        <input placeholder="E-mail" type="email" name="email" formControlName="email">
+    </div>
+
+    <div class="form-control">
+        <input placeholder="Password" type="password" name="password" formControlName="password">
+    </div>
+
+    <div class="form-control">
+        <button type="submit">Login</button>
+    </div>
+    
+</form>

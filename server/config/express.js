@@ -14,6 +14,22 @@ import routes from '../server/routes/index.route';
 import config from './config';
 import APIError from '../server/helpers/APIError';
 
+//User model
+import User from '../server/models/user.model';
+
+// GraphQL dependencies
+import { graphqlExpress, graphiqlExpress } from 'apollo-server-express';
+import { makeExecutableSchema } from 'graphql-tools';
+import jwt from 'jsonwebtoken';
+
+import typeDefs from '../server/graphql/schema';
+import resolvers from '../server/graphql/resolvers';
+
+const schema = makeExecutableSchema({
+  typeDefs,
+  resolvers
+});
+
 const app = express();
 
 if (config.env === 'development') {
@@ -33,6 +49,43 @@ app.use(helmet());
 
 // enable CORS - Cross Origin Resource Sharing
 app.use(cors());
+
+// GraphQL authentication middleware
+const addUser = async (req) => {
+  const token = req.headers.authorization;
+  try {
+    const { user } = await jwt.verify(token, config.jwtSecret);
+    req.user = user;
+  } catch (err) {
+    console.log(err);
+  }
+  req.next();
+};
+
+app.use(addUser);
+
+// GraphiQL, a visual editor for queries
+app.use(
+  '/graphiql',
+  graphiqlExpress({
+    endpointURL: '/graphql',
+  }),
+);
+
+// GraphQL setup
+app.use(
+  '/graphql',
+  bodyParser.json(),
+  graphqlExpress(req => ({
+    schema,
+    context: {
+      User,
+      config,
+      user: req.user,
+    },
+  })),
+);
+
 
 // enable detailed API logging in dev env
 if (config.env === 'development') {
