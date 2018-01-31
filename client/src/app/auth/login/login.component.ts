@@ -45,7 +45,7 @@ export class LoginComponent {
     this._authService.login(model.email, model.password).subscribe(
       ({data}) => {
         this._authService.setAuth(data.me);
-        this._router.navigateByUrl('/');
+        this._router.navigateByUrl('/account');
       },
       (err) => {
         this.error = err.graphQLErrors[0];

@@ -19,6 +19,7 @@ import { APP_RESOLVER_PROVIDERS } from './app.resolver';
 import { AppState, InternalStateType } from './app.service';
 import { HomeComponent } from './home';
 import { AboutComponent } from './about';
+import { AccountComponent } from './account';
 import { NoContentComponent } from './no-content';
 import { XLargeDirective } from './home/x-large';
 import { DevModuleModule } from './+dev-module';
@@ -26,7 +27,8 @@ import { AuthModule } from './auth';
 import { 
   AuthService,
   JwtService,
-  LoginGuard
+  LoginGuard,
+  AuthGuard
 } from './shared';
 
 import '../styles/styles.scss';
@@ -38,7 +40,8 @@ const APP_PROVIDERS = [
   AppState,
   AuthService,
   JwtService,
-  LoginGuard
+  LoginGuard,
+  AuthGuard
 ];
 
 type StoreType = {
@@ -55,6 +58,7 @@ type StoreType = {
   declarations: [
     AppComponent,
     AboutComponent,
+    AccountComponent,
     HomeComponent,
     NoContentComponent,
     XLargeDirective

@@ -60,6 +60,10 @@ import {
       </div>
 
       <div class="nav-right" *ngIf="currentUser._id">
+        <a [routerLink]=" ['./account'] "
+          routerLinkActive="active" [routerLinkActiveOptions]= "{exact: true}">
+          Account
+        </a>
         <a href="javascript:;" (click)="logout()"
           routerLinkActive="active" [routerLinkActiveOptions]= "{exact: true}">
           Logout {{currentUser.email}}
@@ -95,10 +99,10 @@ export class AppComponent implements OnInit {
 
   constructor(
     public appState: AppState,
-    public authService: AuthService,
+    private _authService: AuthService,
     private _router: Router
   ) {
-    authService.currentUser.subscribe(
+    _authService.currentUser.subscribe(
       (user) => this.currentUser = user,
       (err) => console.log(err)
     )
@@ -109,7 +113,7 @@ export class AppComponent implements OnInit {
   }
 
   public logout(){
-    this.authService.logout();
+    this._authService.logout();
     this._router.navigateByUrl('/login');
   }
 

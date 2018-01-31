@@ -1,10 +1,12 @@
 import { Routes } from '@angular/router';
 import { HomeComponent } from './home';
 import { AboutComponent } from './about';
+import { AccountComponent } from './account';
 import { NoContentComponent } from './no-content';
 
 import {
-  LoginGuard
+  LoginGuard,
+  AuthGuard
 } from './shared';
 
 import {
@@ -18,6 +20,11 @@ export const ROUTES: Routes = [
   { path: 'about', component: AboutComponent },
   { path: 'detail', loadChildren: './+detail#DetailModule'},
   { path: 'barrel', loadChildren: './+barrel#BarrelModule'},
+  {
+    path: 'account',
+    component: AccountComponent,
+    canActivate: [AuthGuard]
+  },
   {
     path: 'signup',
     component: SignupComponent,
