@@ -29,7 +29,7 @@ export class SignupComponent {
   public error: any = {};
 
   constructor(
-    private router: Router,
+    private _router: Router,
     private _fb: FormBuilder,
     private _authService: AuthService
   ) { 
@@ -56,9 +56,9 @@ export class SignupComponent {
     if(!isValid) return;
 
     this._authService.signup(model.email, model.password).subscribe(
-      (res) => {
-        this._authService.setAuth(res.data.register);
-        this.router.navigateByUrl('/');
+      ({data}) => {
+        this._authService.setAuth(data.me);
+        this._router.navigateByUrl('/');
       },
       (err) => {
         this.error = err.graphQLErrors[0];

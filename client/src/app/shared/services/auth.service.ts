@@ -4,9 +4,9 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/mergeMap';
+import 'rxjs/add/operator/map'
 
 import { Apollo } from 'apollo-angular';
-import * as decode from 'jwt-decode';
 
 import { JwtService } from './jwt.service';
 
@@ -14,16 +14,18 @@ import { User } from '../models';
 
 import { 
   SignupMutation,
-  LoginMutation 
+  LoginMutation,
+  GetCurrentUser
 } from '../graphql';
 
 @Injectable()
 export class AuthService {
 
-  public isLoggedIn: boolean = false;
-
   private _currentUserSubject = new BehaviorSubject<User>(new User());
   public currentUser = this._currentUserSubject.asObservable().distinctUntilChanged();
+
+  private _isAuthenticatedSubject = new ReplaySubject<boolean>(1);
+  public isAuthenticated = this._isAuthenticatedSubject.asObservable();
 
   constructor(
     private apollo: Apollo,
@@ -33,18 +35,19 @@ export class AuthService {
     this.apollo = apollo;
 
     if(_jwtService.getToken()){
-      this.setAuth(_jwtService.getToken());
+      this.getCurrentUser().subscribe(
+        ({data}) => this.setAuth(data.me),
+        (err) => this.logout()
+      );
     } else { 
       this.logout(); 
     }
 
   }
 
-  setAuth(token: string) {
-    this._jwtService.saveToken(token);
-    const payload = decode(token);
-    this._currentUserSubject.next(payload.user);
-    this.isLoggedIn = true;
+  setAuth(user: User) {
+    this._currentUserSubject.next(user);
+    this._isAuthenticatedSubject.next(true);
   }
 
   signup(email: string, password: string) {
@@ -54,7 +57,17 @@ export class AuthService {
         "email": email,
         "password": password
       }
-    });
+    })
+    .map(
+      res => {
+        this._jwtService.saveToken(res.data.register);
+        return this.getCurrentUser();
+      }, 
+      err => this.logout()
+    )
+    .flatMap(
+      data => { return data;}
+    );
   }
 
   login(email: string, password: string) {
@@ -64,13 +77,29 @@ export class AuthService {
         "email": email,
         "password": password
       }
-    });
+    })
+    .map(
+      res => {
+        this._jwtService.saveToken(res.data.login);
+        return this.getCurrentUser();
+      }, 
+      err => this.logout()
+    )
+    .flatMap(
+      data => { return data;}
+    );
   }
 
   logout() {
     this._jwtService.deleteToken();    
     this._currentUserSubject.next(new User());
-    this.isLoggedIn = false;
+    this._isAuthenticatedSubject.next(false);
+  }
+
+  getCurrentUser(){
+    return this.apollo.watchQuery<any>({
+      query: GetCurrentUser
+    }).valueChanges;
   }
 
 }

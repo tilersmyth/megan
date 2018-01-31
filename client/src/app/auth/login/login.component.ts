@@ -43,8 +43,8 @@ export class LoginComponent {
     if(!isValid) return;
 
     this._authService.login(model.email, model.password).subscribe(
-      (res) => {
-        this._authService.setAuth(res.data.login);
+      ({data}) => {
+        this._authService.setAuth(data.me);
         this._router.navigateByUrl('/');
       },
       (err) => {

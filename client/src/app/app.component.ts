@@ -48,7 +48,7 @@ import {
         DevModule
       </a>
 
-      <div class="nav-right" *ngIf="!authService.isLoggedIn">
+      <div class="nav-right" *ngIf="!currentUser._id">
         <a [routerLink]=" ['./signup'] "
           routerLinkActive="active" [routerLinkActiveOptions]= "{exact: true}">
           Sign up
@@ -59,7 +59,7 @@ import {
         </a>
       </div>
 
-      <div class="nav-right" *ngIf="authService.isLoggedIn">
+      <div class="nav-right" *ngIf="currentUser._id">
         <a href="javascript:;" (click)="logout()"
           routerLinkActive="active" [routerLinkActiveOptions]= "{exact: true}">
           Logout {{currentUser.email}}
