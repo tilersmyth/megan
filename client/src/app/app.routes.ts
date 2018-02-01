@@ -5,8 +5,7 @@ import { AccountComponent } from './account';
 import { NoContentComponent } from './no-content';
 
 import {
-  LoginGuard,
-  AuthGuard
+  AuthGuard,
 } from './shared';
 
 import {
@@ -15,7 +14,10 @@ import {
 } from './auth';
 
 export const ROUTES: Routes = [
-  { path: '',      component: HomeComponent },
+  {
+    path        : '',
+    loadChildren: './auth/auth.module#AuthModule'
+  },
   { path: 'home',  component: HomeComponent },
   { path: 'about', component: AboutComponent },
   { path: 'detail', loadChildren: './+detail#DetailModule'},
@@ -24,16 +26,6 @@ export const ROUTES: Routes = [
     path: 'account',
     component: AccountComponent,
     canActivate: [AuthGuard]
-  },
-  {
-    path: 'signup',
-    component: SignupComponent,
-    canActivate: [LoginGuard]
-  },
-  {
-    path: 'login',
-    component: LoginComponent,
-    canActivate: [LoginGuard]
   },
   { path: '**',    component: NoContentComponent },
 ];

@@ -23,12 +23,9 @@ import { AccountComponent } from './account';
 import { NoContentComponent } from './no-content';
 import { XLargeDirective } from './home/x-large';
 import { DevModuleModule } from './+dev-module';
-import { AuthModule } from './auth';
+
 import { 
-  AuthService,
-  JwtService,
-  LoginGuard,
-  AuthGuard
+  SharedModule
 } from './shared';
 
 import '../styles/styles.scss';
@@ -37,11 +34,7 @@ import '../styles/headings.css';
 // Application wide providers
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
-  AppState,
-  AuthService,
-  JwtService,
-  LoginGuard,
-  AuthGuard
+  AppState
 ];
 
 type StoreType = {
@@ -72,7 +65,7 @@ type StoreType = {
     FormsModule,
     HttpClientModule,
     GraphQLModule,
-    AuthModule,
+    SharedModule.forRoot(),
     RouterModule.forRoot(ROUTES, {
       useHash: Boolean(history.pushState) === false,
       preloadingStrategy: PreloadAllModules

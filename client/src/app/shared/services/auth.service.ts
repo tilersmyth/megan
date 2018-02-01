@@ -46,6 +46,12 @@ export class AuthService {
   }
 
   setAuth(user: User) {
+
+    if(!user){
+      this.logout();
+      return;
+    }
+
     this._currentUserSubject.next(user);
     this._isAuthenticatedSubject.next(true);
   }

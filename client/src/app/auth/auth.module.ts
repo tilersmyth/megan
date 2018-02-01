@@ -1,26 +1,38 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 
-import {
-    SignupComponent,
-} from './signup';
+import { 
+  SharedModule
+} from '../shared';
 
-import {
-    LoginComponent,
-} from './login';
+import { LoginGuard } from './services';
+import { SignupComponent } from './signup';
+import { LoginComponent } from './login';
+
+const routes: Routes = [
+  {
+    path: 'signup',
+    component: SignupComponent,
+    canActivate: [LoginGuard]
+  },
+  {
+    path: 'login',
+    component: LoginComponent,
+    canActivate: [LoginGuard]
+  },
+];
 
 @NgModule({
   imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    RouterModule
+    SharedModule,
+    RouterModule.forChild(routes)
   ],
   declarations: [
     SignupComponent,
     LoginComponent
   ],
-  providers: []
+  providers: [
+    LoginGuard
+  ]
 })
 export class AuthModule { }

@@ -32,7 +32,7 @@ services:
     env_file:
       - ./server/.env
     environment:
-      - MONGO_HOST=mongodb://mongo/meanish
+      - MONGO_HOST=mongodb://mongo/megan-dev
       - DEBUG=server:*
     links:
       - mongo
