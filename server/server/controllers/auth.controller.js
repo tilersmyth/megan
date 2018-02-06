@@ -1,50 +1,66 @@
+import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import httpStatus from 'http-status';
-import APIError from '../helpers/APIError';
-import config from '../../config/config';
+import _ from 'lodash';
 
-// sample user, used for authentication
-const user = {
-  username: 'react',
-  password: 'express'
-};
+import User from '../models/user.model';
 
-/**
- * Returns jwt token if valid username and password is provided
- * @param req
- * @param res
- * @param next
- * @returns {*}
- */
-function login(req, res, next) {
-  // Ideally you'll fetch this from the db
-  // Idea here was to show how jwt works with simplicity
-  if (req.body.username === user.username && req.body.password === user.password) {
-    const token = jwt.sign({
-      username: user.username
-    }, config.jwtSecret);
-    return res.json({
-      token,
-      username: user.username
-    });
+const login = async (params, config) => {
+  
+  const user = await User.findOne({ email: params.email });
+
+  if (!user) {
+    throw new Error('No user associated with specified email address');
   }
 
-  const err = new APIError('Authentication error', httpStatus.UNAUTHORIZED, true);
-  return next(err);
+  const valid = await bcrypt.compare(params.password, user.password);
+  if (!valid) {
+    throw new Error('The password entered is not correct');
+  }
+
+  const token = jwt.sign(
+    {
+      user: _.pick(user, ['_id', 'email']),
+    },
+    config.jwtSecret,
+    {
+      expiresIn: '1y',
+    },
+  );
+
+  return token;
+
 }
 
-/**
- * This is a protected route. Will return random number only if jwt token is provided in header.
- * @param req
- * @param res
- * @returns {*}
- */
-function getRandomNumber(req, res) {
-  // req.user is assigned by jwt middleware if valid token is provided
-  return res.json({
-    user: req.user,
-    num: Math.random() * 100
-  });
+const register = async (params, config) => {
+
+  const newUser = params;
+
+  const existingUser = await User.findOne({ email: newUser.email });
+
+  if (existingUser) {
+    throw new Error('The specified email address is already in use');
+  }
+
+  newUser.password = await bcrypt.hash(newUser.password, 12);
+
+  const user = await new User(newUser).save();
+
+  if(!user){
+    throw new Error('Error saving new user');
+  }
+
+  const token = jwt.sign(
+    {
+      user: _.pick(user, ['_id', 'email']),
+    },
+    config.jwtSecret,
+    {
+      expiresIn: '1y',
+    },
+  );
+
+  return token;
+
 }
 
-export default { login, getRandomNumber };
+export default { login, register };

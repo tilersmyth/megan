@@ -1,6 +1,19 @@
 import User from '../models/user.model';
 
 /**
+ * Load current user for GraphQL
+ */
+const me = (user) => {
+  
+  if (user) {
+    return User.findById(user._id);
+  }
+
+  return null;
+
+}
+
+/**
  * Load user and append to req.
  */
 function load(req, res, next, id) {
@@ -77,4 +90,4 @@ function remove(req, res, next) {
     .catch(e => next(e));
 }
 
-export default { load, get, create, update, list, remove };
+export default { me, load, get, create, update, list, remove };
