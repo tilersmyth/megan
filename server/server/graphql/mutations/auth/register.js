@@ -3,18 +3,15 @@ import {
     GraphQLString
 } from 'graphql';
 
-import userType from '../../types/user';
+import authType from '../../types/auth';
+import userInputType from '../../types/user-input';
 
 export default {
-    type: GraphQLString,
+    type: authType,
     args: {
-        email: {
-            name: 'email',
-            type: new GraphQLNonNull(GraphQLString)
-        },
-        password: {
-            name: 'password',
-            type: new GraphQLNonNull(GraphQLString)
+        data: {
+            name: 'data',
+            type: new GraphQLNonNull(userInputType)
         }
     },
     resolve (root, params, { ctrl, config }) {

@@ -37,7 +37,7 @@ export class GraphQLModule {
         return {};
       } else {
         return {
-          headers: header.append('Authorization', `${token}`)
+          headers: header.append('Authorization', `Bearer ${token}`)
         };
       }
     });

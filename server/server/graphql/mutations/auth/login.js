@@ -3,10 +3,10 @@ import {
     GraphQLString
 } from 'graphql';
 
-import userType from '../../types/user';
+import authType from '../../types/auth';
 
 export default {
-    type: GraphQLString,
+    type: authType,
     args: {
         email: {
             name: 'email',
@@ -17,7 +17,7 @@ export default {
             type: new GraphQLNonNull(GraphQLString)
         }
     },
-    resolve (root, params, { ctrl, config }) {
-        return ctrl.auth.login(params, config);
+    resolve (root, args, { ctrl, config }) {
+        return ctrl.auth.login(args, config);
     }
 };

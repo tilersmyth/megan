@@ -3,7 +3,9 @@ import gql from 'graphql-tag';
 export const GetCurrentUser= gql`
      query GetCurrentUser {
         me{
-            _id
+            id
+            first_name
+            last_name
             email
             createdAt
         }

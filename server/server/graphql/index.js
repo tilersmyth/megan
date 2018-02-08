@@ -4,7 +4,8 @@ import {
   } from 'graphql';
 
 import { graphqlExpress, graphiqlExpress } from 'apollo-server-express';
-import jwt from 'jsonwebtoken';
+
+import auth from '../auth/auth.service';
 
 import mutations from './mutations';
 import queries from './queries';
@@ -23,20 +24,9 @@ const schema = new GraphQLSchema({
 });
 
 function init(_app, bodyParser, config) {
-
-    // GraphQL authentication middleware
-    const addUser = async (req) => {
-        const token = req.headers.authorization;
-        try {
-        const { user } = await jwt.verify(token, config.jwtSecret);
-        req.user = user;
-        } catch (err) {
-        console.log(err);
-        }
-        req.next();
-    };
   
-    _app.use(addUser);
+    //Authenticate endpoint
+    _app.use('/graphql', auth.graphAuth);
   
     // GraphiQL, a visual editor for queries
     _app.use(

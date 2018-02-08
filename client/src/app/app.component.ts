@@ -48,7 +48,7 @@ import {
         DevModule
       </a>
 
-      <div class="nav-right" *ngIf="!currentUser._id">
+      <div class="nav-right" *ngIf="!currentUser.id">
         <a [routerLink]=" ['./signup'] "
           routerLinkActive="active" [routerLinkActiveOptions]= "{exact: true}">
           Sign up
@@ -58,15 +58,14 @@ import {
           Login
         </a>
       </div>
-
-      <div class="nav-right" *ngIf="currentUser._id">
+      <div class="nav-right" *ngIf="currentUser.id">
         <a [routerLink]=" ['./account'] "
           routerLinkActive="active" [routerLinkActiveOptions]= "{exact: true}">
           Account
         </a>
         <a href="javascript:;" (click)="logout()"
           routerLinkActive="active" [routerLinkActiveOptions]= "{exact: true}">
-          Logout {{currentUser.email}}
+          Hi {{currentUser.first_name}},  logout 
         </a>
       </div>
 

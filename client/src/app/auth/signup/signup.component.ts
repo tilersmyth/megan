@@ -16,6 +16,10 @@ export class SignupComponent {
 
   signupForm: FormGroup;
 
+  first_name = new FormControl('', [Validators.required]);
+    
+  last_name = new FormControl('', [Validators.required]);
+
   email = new FormControl('', [Validators.required,
     Validators.email]);
 
@@ -35,6 +39,8 @@ export class SignupComponent {
   ) { 
 
     this.signupForm = _fb.group({
+      first_name: this.first_name,
+      last_name: this.last_name,
       email: this.email,
       password: this.password,
       passwordConfirm: this.passwordConfirm
@@ -55,9 +61,8 @@ export class SignupComponent {
 
     if(!isValid) return;
 
-    this._authService.signup(model.email, model.password).subscribe(
-      ({data}) => {
-        this._authService.setAuth(data.me);
+    this._authService.signup(model).subscribe(
+      (res) => {
         this._router.navigateByUrl('/account');
       },
       (err) => {

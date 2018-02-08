@@ -4,6 +4,8 @@ import mongoose from 'mongoose';
  * User Schema
  */
 const UserSchema = new mongoose.Schema({
+  first_name: String,
+  last_name: String,
   email: {
     type: String,
     lowercase: true,

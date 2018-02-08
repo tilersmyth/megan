@@ -42,9 +42,8 @@ export class LoginComponent {
 
     if(!isValid) return;
 
-    this._authService.login(model.email, model.password).subscribe(
-      ({data}) => {
-        this._authService.setAuth(data.me);
+    this._authService.login(model).subscribe(
+      (res) => {
         this._router.navigateByUrl('/account');
       },
       (err) => {

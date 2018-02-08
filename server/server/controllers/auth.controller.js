@@ -1,6 +1,5 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import _ from 'lodash';
 
 import User from '../models/user.model';
 
@@ -19,7 +18,7 @@ const login = async (params, config) => {
 
   const token = jwt.sign(
     {
-      user: _.pick(user, ['_id', 'email']),
+      _id: user._id
     },
     config.jwtSecret,
     {
@@ -27,13 +26,13 @@ const login = async (params, config) => {
     },
   );
 
-  return token;
+  return { user: user, token: token };
 
 }
 
 const register = async (params, config) => {
 
-  const newUser = params;
+  const newUser = params.data;
 
   const existingUser = await User.findOne({ email: newUser.email });
 
@@ -51,7 +50,7 @@ const register = async (params, config) => {
 
   const token = jwt.sign(
     {
-      user: _.pick(user, ['_id', 'email']),
+      _id: user._id
     },
     config.jwtSecret,
     {
@@ -59,7 +58,7 @@ const register = async (params, config) => {
     },
   );
 
-  return token;
+  return { user: user, token: token };
 
 }
 

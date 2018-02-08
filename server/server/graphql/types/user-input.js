@@ -1,16 +1,12 @@
 import {
-    GraphQLObjectType,
+    GraphQLInputObjectType,
     GraphQLNonNull,
     GraphQLString,
-    GraphQLID
   } from 'graphql';
   
-export default new GraphQLObjectType({
-    name: 'User',
+export default new GraphQLInputObjectType({
+    name: 'UserInput',
     fields: () => ({
-        id: {
-            type: new GraphQLNonNull(GraphQLID)
-        },
         first_name: {
             type: new GraphQLNonNull(GraphQLString)
         },
@@ -20,9 +16,8 @@ export default new GraphQLObjectType({
         email: {
             type: new GraphQLNonNull(GraphQLString)
         },
-        createdAt: {
-            type: GraphQLString
+        password: {
+            type: new GraphQLNonNull(GraphQLString)
         }
-
     })
 });

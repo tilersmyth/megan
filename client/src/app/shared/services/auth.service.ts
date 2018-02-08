@@ -3,7 +3,6 @@ import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import 'rxjs/add/operator/distinctUntilChanged';
-import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/map'
 
 import { Apollo } from 'apollo-angular';
@@ -45,54 +44,56 @@ export class AuthService {
 
   }
 
-  setAuth(user: User) {
+  setAuth(user: User, token?: string) {
 
     if(!user){
       this.logout();
       return;
     }
 
+    if(token){
+      this._jwtService.saveToken(token);
+    }
+  
     this._currentUserSubject.next(user);
     this._isAuthenticatedSubject.next(true);
   }
 
-  signup(email: string, password: string) {
+  signup(user: User) {
     return this.apollo.mutate({
       mutation: SignupMutation,
       variables: {
-        "email": email,
-        "password": password
+        "data": {
+          "first_name": user.first_name,
+          "last_name": user.last_name,
+          "email": user.email,
+          "password": user.password
+        }
       }
     })
     .map(
-      res => {
-        this._jwtService.saveToken(res.data.register);
-        return this.getCurrentUser();
+      res => { 
+        this.setAuth(res.data.register.user, res.data.register.token);
+        return;
       }, 
       err => this.logout()
-    )
-    .flatMap(
-      data => { return data;}
     );
   }
 
-  login(email: string, password: string) {
+  login(user: User) {
     return this.apollo.mutate({
       mutation: LoginMutation,
       variables: {
-        "email": email,
-        "password": password
+        "email": user.email,
+        "password": user.password
       }
     })
     .map(
       res => {
-        this._jwtService.saveToken(res.data.login);
-        return this.getCurrentUser();
+        this.setAuth(res.data.login.user, res.data.login.token);
+        return;
       }, 
       err => this.logout()
-    )
-    .flatMap(
-      data => { return data;}
     );
   }
 
