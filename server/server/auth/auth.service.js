@@ -2,7 +2,7 @@ import expressJwt from 'express-jwt';
 import config from '../../config/config';
 
 const validateJwt = expressJwt({
-    secret: config.jwtSecret
+    secret: config.secrets.jwt
 });
 
 /**

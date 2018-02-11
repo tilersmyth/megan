@@ -19,7 +19,7 @@ import {
 export class GraphQLModule {
 
   constructor(
-    private _apollo: Apollo, 
+    private _apollo: Apollo,
     private _httpLink: HttpLink,
     private _jwtService: JwtService,
   ) {
@@ -28,11 +28,11 @@ export class GraphQLModule {
     const http = _httpLink.create({ uri });
 
     const auth = setContext((_, { headers }) => {
-      
+    
       const token = _jwtService.getToken();
 
       let header = new HttpHeaders();
-      
+    
       if (!token) {
         return {};
       } else {

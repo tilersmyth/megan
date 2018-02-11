@@ -8,6 +8,7 @@ import {
 import { LoginGuard } from './services';
 import { SignupComponent } from './signup';
 import { LoginComponent } from './login';
+import { ConfirmAccountComponent } from './confirm';
 
 const routes: Routes = [
   {
@@ -20,6 +21,10 @@ const routes: Routes = [
     component: LoginComponent,
     canActivate: [LoginGuard]
   },
+  {
+    path: 'confirm/:token',
+    component: ConfirmAccountComponent
+  },
 ];
 
 @NgModule({
@@ -29,7 +34,8 @@ const routes: Routes = [
   ],
   declarations: [
     SignupComponent,
-    LoginComponent
+    LoginComponent,
+    ConfirmAccountComponent
   ],
   providers: [
     LoginGuard

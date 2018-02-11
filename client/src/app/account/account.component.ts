@@ -33,11 +33,11 @@ export class AccountComponent implements OnInit {
   ) {}
 
   public ngOnInit() {
-    
+  
     this._authService.currentUser.subscribe(
       (user) => this.currentUser = user,
       (err) => console.log(err)
-    )
+    );
 
     console.log('hello `Account` component');
   }

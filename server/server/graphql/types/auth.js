@@ -4,7 +4,8 @@ import {
     GraphQLString,
     GraphQLID,
     GraphQLObjectType,
-    GraphQLList
+    GraphQLList,
+    GraphQLBoolean
   } from 'graphql';
 
 import userType from './user';
@@ -12,11 +13,14 @@ import userType from './user';
 export default new GraphQLObjectType({
     name: 'Auth',
     fields: () => ({
+        auth: {
+            type: new GraphQLNonNull(GraphQLBoolean)
+        },
         token: {
-            type: new GraphQLNonNull(GraphQLString)
+            type: GraphQLString
         },
         user: {
-            type: new GraphQLNonNull(userType)
+            type: userType
         }
     })
 });

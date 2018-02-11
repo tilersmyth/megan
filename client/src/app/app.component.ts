@@ -2,7 +2,7 @@
  * Angular 2 decorators and services
  */
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { Router } from "@angular/router";
+import { Router } from '@angular/router';
 import { environment } from 'environments/environment';
 import { AppState } from './app.service';
 
@@ -104,14 +104,14 @@ export class AppComponent implements OnInit {
     _authService.currentUser.subscribe(
       (user) => this.currentUser = user,
       (err) => console.log(err)
-    )
+    );
   }
 
   public ngOnInit() {
     console.log('Initial App State', this.appState.state);
   }
 
-  public logout(){
+  public logout() {
     this._authService.logout();
     this._router.navigateByUrl('/login');
   }

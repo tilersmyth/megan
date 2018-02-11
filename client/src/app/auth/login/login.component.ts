@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router } from "@angular/router";
+import { Router } from '@angular/router';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 
 import {
@@ -8,49 +8,57 @@ import {
 } from '../../shared';
 
 @Component({
-  selector: 'app-login', 
+  selector: 'app-login',
   styleUrls: [ './login.component.scss' ],
   templateUrl: './login.component.html'
 })
 export class LoginComponent {
 
-  loginForm: FormGroup;
+  public loginForm: FormGroup;
 
-  email = new FormControl('', [Validators.required,
+  public email = new FormControl('', [Validators.required,
     Validators.email]);
 
-  password = new FormControl('', [Validators.required,
-    Validators.minLength(3)]); 
+  public password = new FormControl('', [Validators.required,
+    Validators.minLength(3)]);
 
   public submitted: boolean = false;
   public error: any = {};
+  public confirm: string;
 
   constructor(
     private _router: Router,
     private _fb: FormBuilder,
     private _authService: AuthService
-  ) { 
+  ) {
     this.loginForm = _fb.group({
       email: this.email,
       password: this.password
     });
   }
 
-  login(model: User, isValid: boolean) {
+  public login(model: User, isValid: boolean) {
 
     this.error = {};
 
-    if(!isValid) return;
+    if (!isValid) { return };
 
     this._authService.login(model).subscribe(
-      (res) => {
+      (auth) => {
+
+        if(!auth){
+          this.loginForm.reset();
+          this.confirm = 'This account has not been activated. Check your email!';
+          return;
+        }
+
         this._router.navigateByUrl('/account');
       },
       (err) => {
         this.error = err.graphQLErrors[0];
       }
     );
-    
+
   }
 
 }

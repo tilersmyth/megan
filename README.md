@@ -51,6 +51,16 @@ go to [http://localhost](http://localhost) in your browser
 
 ### GraphiQL
 Access the in-browser GraphQL IDE at [http://localhost:4040/graphiql](http://localhost:4040/graphiql)
+
+### Nodemailer
+Easily send transactional emails using the Noedemailer integration. **Test this functionality by requiring account activation via email by setting the following in docker-compose.yml**
+
+```bash
+EMAIL_CONFIRMATION=true
+```
+
+It's important to note that `MAIL_USER` and `MAIL_PASS` must be set in the .env file to make Nodemailer work. Also, `smtp.gmail.com` is set as the transport host by default; change this if a different mail service will be used. 
+
 ___
 
 Again, credit goes to [Angular Starter](https://github.com/gdi2290/angular-starter) and [express-mongoose-es6-rest-api](https://github.com/KunalKapadia/express-mongoose-es6-rest-api) for the great foundation that this project is built upon.

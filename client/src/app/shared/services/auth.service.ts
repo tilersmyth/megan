@@ -3,7 +3,7 @@ import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import 'rxjs/add/operator/distinctUntilChanged';
-import 'rxjs/add/operator/map'
+import 'rxjs/add/operator/map';
 
 import { Apollo } from 'apollo-angular';
 
@@ -11,7 +11,7 @@ import { JwtService } from './jwt.service';
 
 import { User } from '../models';
 
-import { 
+import {
   SignupMutation,
   LoginMutation,
   GetCurrentUser
@@ -33,33 +33,33 @@ export class AuthService {
 
     this.apollo = apollo;
 
-    if(_jwtService.getToken()){
+    if (_jwtService.getToken()) {
       this.getCurrentUser().subscribe(
         ({data}) => this.setAuth(data.me),
         (err) => this.logout()
       );
-    } else { 
-      this.logout(); 
+    } else {
+      this.logout();
     }
 
   }
 
-  setAuth(user: User, token?: string) {
+  public setAuth(user: User, token?: string) {
 
-    if(!user){
+    if (!user) {
       this.logout();
       return;
     }
 
-    if(token){
+    if (token) {
       this._jwtService.saveToken(token);
     }
-  
+
     this._currentUserSubject.next(user);
     this._isAuthenticatedSubject.next(true);
   }
 
-  signup(user: User) {
+  public signup(user: User) {
     return this.apollo.mutate({
       mutation: SignupMutation,
       variables: {
@@ -72,38 +72,38 @@ export class AuthService {
       }
     })
     .map(
-      res => { 
+      (res) => {
         this.setAuth(res.data.register.user, res.data.register.token);
-        return;
-      }, 
-      err => this.logout()
+        return res.data.register.auth;
+      },
+      (err) => this.logout()
     );
   }
 
-  login(user: User) {
+  public login(user: User) {
     return this.apollo.mutate({
       mutation: LoginMutation,
-      variables: {
+      "variables": {
         "email": user.email,
         "password": user.password
       }
     })
     .map(
-      res => {
+      (res) => {
         this.setAuth(res.data.login.user, res.data.login.token);
-        return;
-      }, 
-      err => this.logout()
+        return res.data.login.auth;
+      },
+      (err) => this.logout()
     );
   }
 
-  logout() {
-    this._jwtService.deleteToken();    
+  public logout() {
+    this._jwtService.deleteToken();
     this._currentUserSubject.next(new User());
     this._isAuthenticatedSubject.next(false);
   }
 
-  getCurrentUser(){
+  public getCurrentUser() {
     return this.apollo.watchQuery<any>({
       query: GetCurrentUser
     }).valueChanges;

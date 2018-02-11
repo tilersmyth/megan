@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import config from '../../config/config';
 
 /**
  * User Schema
@@ -15,6 +16,10 @@ const UserSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true
+  },
+  active: {
+    type: Boolean,
+    default: (config.confirm_mail ? false : true)
   },
   createdAt: {
     type: Date,

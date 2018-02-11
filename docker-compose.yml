@@ -34,6 +34,7 @@ services:
     environment:
       - MONGO_HOST=mongodb://mongo/megan-dev
       - DEBUG=server:*
+      - EMAIL_CONFIRMATION=false
     links:
       - mongo
 

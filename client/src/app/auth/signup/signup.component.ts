@@ -31,6 +31,7 @@ export class SignupComponent {
 
   public submitted: boolean = false;
   public error: any = {};
+  public confirm: string;
 
   constructor(
     private _router: Router,
@@ -62,7 +63,14 @@ export class SignupComponent {
     if(!isValid) return;
 
     this._authService.signup(model).subscribe(
-      (res) => {
+      (auth) => {
+
+        if(!auth){
+          this.signupForm.reset();
+          this.confirm = 'Check your email to activate this account!';
+          return;
+        }
+
         this._router.navigateByUrl('/account');
       },
       (err) => {

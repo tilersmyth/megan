@@ -5,8 +5,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { RouterModule, PreloadAllModules } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-//GraphQL
-import {GraphQLModule} from './apollo.config';
+// GraphQL
+import { GraphQLModule } from './apollo.config';
 
 /*
  * Platform and Environment providers/directives/pipes
@@ -24,7 +24,7 @@ import { NoContentComponent } from './no-content';
 import { XLargeDirective } from './home/x-large';
 import { DevModuleModule } from './+dev-module';
 
-import { 
+import {
   SharedModule
 } from './shared';
 
