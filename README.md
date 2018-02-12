@@ -13,7 +13,8 @@ This README will be updated soon, but here a few noteworthy points about this re
 * [Docker](https://www.docker.com/) is used to run this project and keep everything working in harmony.  
 * The frontend is served via [NGINX](https://www.nginx.com/) reverse proxy.
 * [GraphQL](http://graphql.org/) is used as the API query language.
-* Simple user authentication is included.
+* [Passport](http://www.passportjs.org/) enabled local user authentication strategy
+* [Nodemailer](https://www.nodemailer.com/) implementation with [email-templates](https://www.github.com/niftylettuce/email-templates) to easily send formatted transactional emails
 * More to come soon...
 
 
@@ -53,7 +54,7 @@ go to [http://localhost](http://localhost) in your browser
 Access the in-browser GraphQL IDE at [http://localhost:4040/graphiql](http://localhost:4040/graphiql)
 
 ### Nodemailer
-Easily send transactional emails using the Noedemailer integration. **Test this functionality by requiring account activation via email by setting the following in docker-compose.yml**
+Easily send transactional emails using the Nodemailer integration. **Test this functionality by requiring account activation via email by setting the following in docker-compose.yml**
 
 ```bash
 EMAIL_CONFIRMATION=true
