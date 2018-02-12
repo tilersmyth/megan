@@ -1,4 +1,6 @@
 import expressJwt from 'express-jwt';
+import jwt from 'jsonwebtoken';
+
 import config from '../../config/config';
 
 const validateJwt = expressJwt({
@@ -22,4 +24,32 @@ const graphAuth = async (req, res, next) => {
   
 }
 
-export default { graphAuth };
+/**
+ * Return token signed by respective secret
+ */
+const signToken = (payload, secret, duration) => {
+
+    return jwt.sign(payload, secret, {
+        expiresIn: duration
+    });
+  
+}
+
+/**
+ * Verify signed token
+ */
+const verifyToken = (token, secret, done) => {
+
+    return jwt.verify(token, secret, function(err, decoded) {
+
+        if(err){
+            return done(err);
+        }
+
+        return done(null, decoded);
+    });
+  
+}
+
+
+export default { graphAuth, signToken, verifyToken };

@@ -1,124 +1,96 @@
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
+import passport from 'passport';
+import { signToken, verifyToken } from '../auth/auth.service';
 
 import User from '../models/user.model';
 import mail from '../mail';
 
-const login = async (params, config) => {
+const login = async (params, config, req) => {
   
-  const user = await User.findOne({ email: params.email });
-
-  if (!user) {
-    throw new Error('No user associated with specified email address');
+  if(req.user){
+    throw new Error('Already logged in');
   }
 
-  const valid = await bcrypt.compare(params.password, user.password);
-  if (!valid) {
-    throw new Error('The password entered is not correct');
-  }
+  req.body.email = params.email;
+  req.body.password = params.password;
 
-  // Account not activated
-  if(!user.active){
+  const auth = new Promise(function(resolve, reject) {
+    passport.authenticate('local', function(err, user, info) {
 
-    return { auth: false, user: null, token: null };
+      const error = err || info;
 
-  }
+      if(error) {
+        reject(error)
+      }
 
-  const token = jwt.sign(
-    {
-      _id: user._id
-    },
-    config.secrets.jwt,
-    {
-      expiresIn: '1y',
-    },
-  );
-  
-  return { auth: true, user: user, token: token };
+      if(!user) {
+        reject(new Error('Something went wrong, please try again.'));
+      }
+      
+      resolve(user);
+
+    })(req);
+  });
+
+  return await auth
+    .then(user => {
+
+      const token = signToken({_id: user._id}, config.secrets.jwt, '1y');
+
+      return { auth: true, user: user, token: token };
+
+    })
+    .catch(err => {
+      throw new Error(err.message);
+    });
 
 }
 
-const register = async (params, config) => {
+const register = async (params, config, req) => {
 
   const newUser = params.data;
 
-  const existingUser = await User.findOne({ email: newUser.email });
+  return await new User(newUser).save()
+    .then((user) => {
 
-  if (existingUser) {
-    throw new Error('The specified email address is already in use');
-  }
+      // New account confirmation required
+      if(!user.active){
+        const confirmToken = signToken({_id: user._id}, config.secrets.confirm, '1h');
 
-  newUser.password = await bcrypt.hash(newUser.password, 12);
+        mail.confirmAccount.sendMail(
+          user.email, 
+          {name: user.first_name, link: config.domain + 'confirm/' + confirmToken}
+        );
 
-  const user = await new User(newUser).save();
+        return { auth: false, user: null, token: null };
+      }
 
-  if(!user){
-    throw new Error('Error saving new user');
-  }
+      const token = signToken({_id: user._id}, config.secrets.jwt, '1y'); 
+      return { auth: true, user: user, token: token };
 
-  const confirmToken = jwt.sign(
-    {
-      _id: user._id
-    },
-    config.secrets.confirm,
-    {
-      expiresIn: '1h',
-    },
-  );
-
-  // New account confirmation required
-  if(!user.active){
-
-    mail.confirmAccount.sendMail(
-      newUser.email, 
-      {name: newUser.first_name, link: config.domain + 'confirm/' + confirmToken}
-    );
-
-    return { auth: false, user: null, token: null };
-
-  }
-
-  const token = jwt.sign(
-    {
-      _id: user._id
-    },
-    config.secrets.jwt,
-    {
-      expiresIn: '1y',
-    },
-  );
-
-  return { auth: true, user: user, token: token };
-
+    })
+    .catch((err) => {
+      throw new Error(err);
+    });
 }
 
 const confirm = async (params, config) => {
 
-  return jwt.verify(params.token, config.secrets.confirm, function(err, decoded) {
+  return verifyToken(params.token, config.secrets.confirm, function(err, decoded) {
 
     // Token expired or malformed
     if(err){
-      return err;
+      throw new Error(err);
     }
 
     return User.findOneAndUpdate({_id: decoded._id}, {$set:{active: true}}, '-password').exec()
       .then((user) => {
-        
-        const token = jwt.sign(
-          {
-            _id: user._id
-          },
-          config.secrets.jwt,
-          {
-            expiresIn: '1y',
-          },
-        );
-      
+
+        const token = signToken({_id: user._id}, config.secrets.jwt, '1y');
         return { auth: true, user: user, token: token };
 
       })
       .catch((err) => {
-        console.log(err);
+        throw new Error(err);
       });
 
   });

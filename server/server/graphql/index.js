@@ -5,7 +5,7 @@ import {
 
 import { graphqlExpress, graphiqlExpress } from 'apollo-server-express';
 
-import auth from '../auth/auth.service';
+import { graphAuth } from '../auth/auth.service';
 
 import mutations from './mutations';
 import queries from './queries';
@@ -26,7 +26,7 @@ const schema = new GraphQLSchema({
 function init(_app, bodyParser, config) {
   
     //Authenticate endpoint
-    _app.use('/graphql', auth.graphAuth);
+    _app.use('/graphql', graphAuth);
   
     // GraphiQL, a visual editor for queries
     _app.use(
@@ -45,7 +45,7 @@ function init(_app, bodyParser, config) {
         context: {
             ctrl,
             config,
-            user: req.user,
+            req
         },
         })),
     );

@@ -11,6 +11,7 @@ import expressValidation from 'express-validation';
 import helmet from 'helmet';
 import winstonInstance from './winston';
 import routes from '../server/routes/index.route';
+import passport from '../server/auth/passport';
 import config from './config';
 import APIError from '../server/helpers/APIError';
 
@@ -22,13 +23,14 @@ if (config.env === 'development') {
   app.use(logger('dev'));
 }
 
-// parse body params and attache them to req.body
+// parse body params and attach them to req.body
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(cookieParser());
 app.use(compress());
 app.use(methodOverride());
+app.use(passport.initialize());
 
 // secure apps by setting various HTTP headers
 app.use(helmet());

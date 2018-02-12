@@ -17,7 +17,7 @@ export default {
             type: new GraphQLNonNull(GraphQLString)
         }
     },
-    resolve (root, args, { ctrl, config }) {
-        return ctrl.auth.login(args, config);
+    resolve (root, args, { ctrl, config, req }) {
+        return ctrl.auth.login(args, config, req);
     }
 };
