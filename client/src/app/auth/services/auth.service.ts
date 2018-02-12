@@ -15,7 +15,7 @@ import {
   SignupMutation,
   LoginMutation,
   GetCurrentUser
-} from '../graphql';
+} from '../../auth';
 
 @Injectable()
 export class AuthService {

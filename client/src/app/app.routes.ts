@@ -5,12 +5,9 @@ import { AccountComponent } from './account';
 import { NoContentComponent } from './no-content';
 
 import {
-  AuthGuard,
-} from './shared';
-
-import {
   SignupComponent,
-  LoginComponent
+  LoginComponent,
+  AuthGuard
 } from './auth';
 
 export const ROUTES: Routes = [

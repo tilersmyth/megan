@@ -5,11 +5,12 @@ import 'rxjs/add/operator/mergeMap';
 import { Apollo } from 'apollo-angular';
 
 import {
-  User,
-  AuthService,
   ConfirmMutation,
   ResetMutation
-} from '../../shared';
+} from '../../graphql';
+
+import { User } from '../../models';
+import { AuthService } from '../../services';
 
 @Component({
   selector: 'app-reset-password', 

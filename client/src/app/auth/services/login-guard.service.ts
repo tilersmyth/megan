@@ -3,7 +3,7 @@ import { CanActivate } from '@angular/router';
 import {Observable} from "rxjs/Observable";
 import "rxjs/add/operator/take";
 
-import { AuthService } from '../../shared';
+import { AuthService } from '../services';
 
 @Injectable()
 export class LoginGuard implements CanActivate {

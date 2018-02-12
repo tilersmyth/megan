@@ -3,9 +3,16 @@ import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms'
 import { Apollo } from 'apollo-angular';
 
 import {
-  User,
   ForgotMutation
-} from '../../shared';
+} from '../../graphql';
+
+import {
+  User
+} from '../../models';
+
+import {
+  AuthService
+} from '../../services';
 
 @Component({
   selector: 'app-forgot',

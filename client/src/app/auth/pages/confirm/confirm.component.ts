@@ -4,9 +4,12 @@ import 'rxjs/add/operator/mergeMap';
 import { Apollo } from 'apollo-angular';
 
 import {
-  AuthService,
   ConfirmMutation
-} from '../../shared';
+} from '../../graphql';
+
+import {
+  AuthService
+} from '../../services';
 
 @Component({
   selector: 'app-confirm-account', 

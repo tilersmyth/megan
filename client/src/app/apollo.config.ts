@@ -8,7 +8,7 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 
 import {
   JwtService
-} from '../app/shared';
+} from '../app/auth';
 
 @NgModule({
   exports: [

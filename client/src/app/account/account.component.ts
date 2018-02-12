@@ -6,7 +6,7 @@ import {
 import {
   User,
   AuthService
-} from '../shared';
+} from '../auth';
 
 @Component({
   selector: 'account',

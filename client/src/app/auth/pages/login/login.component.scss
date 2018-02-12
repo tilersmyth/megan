@@ -1,6 +1,8 @@
-@import '../../../styles/variables';
+@import '../../../../styles/variables';
 
 form{
+
+    margin-bottom: 20px;
 
     .form-control{
 
@@ -38,7 +40,7 @@ form{
         color: #ffffff;
         width: 300px;
         margin-bottom: 20px;
-    }
+    }    
 
     .success{
         background-color: #5DC560;
@@ -46,6 +48,13 @@ form{
         color: #ffffff;
         width: 300px;
         margin-bottom: 20px;
+    }
+
+    small{
+        display: block;
+        text-align: center;
+        color: #999;
+        width: 320px;
     }
    
 }

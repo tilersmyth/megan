@@ -1,16 +1,17 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-
-import { 
-  SharedModule
-} from '../shared';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 import { LoginGuard } from './services';
-import { SignupComponent } from './signup';
-import { LoginComponent } from './login';
-import { ConfirmAccountComponent } from './confirm';
-import { ForgotComponent } from './forgot';
-import { ResetPasswordComponent } from './reset';
+
+import {
+  SignupComponent,
+  LoginComponent,
+  ConfirmAccountComponent,
+  ForgotComponent,
+  ResetPasswordComponent
+} from './pages';
 
 const routes: Routes = [
   {
@@ -39,7 +40,9 @@ const routes: Routes = [
 
 @NgModule({
   imports: [
-    SharedModule,
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
     RouterModule.forChild(routes)
   ],
   declarations: [
@@ -53,4 +56,4 @@ const routes: Routes = [
     LoginGuard
   ]
 })
-export class AuthModule { }
+export class AuthModule {}

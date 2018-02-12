@@ -9,7 +9,7 @@ import { AppState } from './app.service';
 import {
   User,
   AuthService
-} from './shared';
+} from './auth';
 
 /**
  * App Component
