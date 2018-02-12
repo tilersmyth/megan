@@ -8,8 +8,6 @@ import {
   ConfirmMutation
 } from '../../shared';
 
-
-
 @Component({
   selector: 'app-confirm-account', 
   templateUrl: './confirm.component.html'

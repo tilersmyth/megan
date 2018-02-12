@@ -1,0 +1,30 @@
+<h1>Reset password</h1>
+<h3 *ngIf="invalid">{{invalid}}</h3>
+
+<form *ngIf="!invalid" [formGroup]="resetForm" (ngSubmit)="reset(resetForm.value, resetForm.valid)" novalidate>
+
+    <div class="form-control">
+        <input placeholder="Password" type="password" name="password" formControlName="password">
+    </div>
+
+    <div class="form-control">
+        <input placeholder="Confirm password" type="password" name="passwordConfirm" formControlName="passwordConfirm">
+    </div>
+
+    <div class="error" *ngIf="!passwordConfirm.valid && !passwordConfirm.hasError('required')">
+        Passwords must match
+    </div>
+    
+    <div class="error" *ngIf="error">
+       
+    </div>
+
+    <div class="success" *ngIf="confirm">
+        {{confirm}}
+    </div>
+
+    <div class="form-control">
+        <button type="submit">Reset password</button>
+    </div>
+    
+</form>

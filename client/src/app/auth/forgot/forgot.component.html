@@ -1,0 +1,23 @@
+<h1>Forgot password</h1>
+
+<form [formGroup]="forgotForm" (ngSubmit)="forgot(forgotForm.value, forgotForm.valid)" novalidate>
+
+    <div class="form-control">
+        <input placeholder="E-mail" type="email" name="email" formControlName="email">
+    </div>
+
+    <div class="error" *ngIf="error.message">
+        {{error.message}}
+    </div>
+
+    <div class="success" *ngIf="confirm">
+        {{confirm}}
+    </div>
+
+    <div class="form-control">
+        <button type="submit">Submit</button>
+    </div>
+
+    <small><a routerLink="/login">Back to login</a></small>
+    
+</form>

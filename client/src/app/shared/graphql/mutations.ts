@@ -47,3 +47,15 @@ export const ConfirmMutation = gql`
         }
     }
 `;
+
+export const ForgotMutation = gql`
+    mutation forgot($email: String!) {
+        forgot(email: $email)
+    }
+`;
+
+export const ResetMutation = gql`
+    mutation reset($password: String!) {
+        reset(password: $password)
+    }
+`;

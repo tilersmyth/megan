@@ -97,4 +97,61 @@ const confirm = async (params, config) => {
 
 }
 
-export default { login, register, confirm };
+const forgot = async (params, config) => {
+
+  return User.findOne({email: params.email}).exec()
+    .then((user) => {
+
+      if(!user){
+        throw new Error('E-mail not associated with account.');
+      }
+
+      const confirmToken = signToken({_id: user._id}, config.secrets.confirm, '1h');
+
+      mail.forgotPassword.sendMail(
+        user.email, 
+        {name: user.first_name, link: config.domain + 'reset-password/' + confirmToken}
+      );
+
+      return true;
+
+    })
+    .catch((err) => {
+      throw new Error(err);
+    });
+
+}
+
+const reset = async (params, config, req) => {
+
+  if(!req.user){
+    throw new Error('Not authorized');
+  }
+
+  return User.findById(req.user._id).exec()
+    .then((user) => {
+
+      if(!user){
+        throw new Error('Unable to find current user');
+      }
+
+      user.password = params.password;
+
+      return user.save()
+        .then((user) => {
+          
+          return true;
+
+        })
+        .catch((err) => {
+          throw err;
+        });
+
+    })
+    .catch((err) => {
+      throw new Error(err);
+    });
+
+}
+
+export default { login, register, confirm, forgot, reset };

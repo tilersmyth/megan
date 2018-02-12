@@ -22,6 +22,10 @@
         <input placeholder="Confirm password" type="password" name="passwordConfirm" formControlName="passwordConfirm">
     </div>
 
+    <div class="error" *ngIf="!passwordConfirm.valid && !passwordConfirm.hasError('required')">
+        Passwords must match
+    </div>
+
     <div class="error" *ngIf="error.message">
         {{error.message}}
     </div>

@@ -64,7 +64,7 @@ UserSchema
     if(!this.isModified('password')) {
       return next();
     }
-
+    
     if(!validatePresenceOf(this.password)) {
       return next(new Error('Invalid password'));
     }
