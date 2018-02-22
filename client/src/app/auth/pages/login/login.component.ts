@@ -14,11 +14,14 @@ export class LoginComponent {
 
   public loginForm: FormGroup;
 
-  public email = new FormControl('', [Validators.required,
+  public email = new FormControl('', [
+    Validators.required,
+    Validators.pattern('[^ @]*@[^ @]*'),
     Validators.email]);
 
-  public password = new FormControl('', [Validators.required,
-    Validators.minLength(3)]);
+  public password = new FormControl('', [
+    Validators.required,
+    Validators.minLength(5)]);
 
   public submitted: boolean = false;
   public error: any = {};
@@ -39,12 +42,12 @@ export class LoginComponent {
 
     this.error = {};
 
-    if (!isValid) { return };
+    if (!isValid) { return; }
 
     this._authService.login(model).subscribe(
       (auth) => {
 
-        if(!auth){
+        if (!auth) {
           this.loginForm.reset();
           this.confirm = 'This account has not been activated. Check your email!';
           return;

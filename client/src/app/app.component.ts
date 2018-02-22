@@ -65,7 +65,7 @@ import {
         </a>
         <a href="javascript:;" (click)="logout()"
           routerLinkActive="active" [routerLinkActiveOptions]= "{exact: true}">
-          Hi {{currentUser.first_name}},  logout 
+          Hi {{currentUser.firstName}},  logout
         </a>
       </div>
 

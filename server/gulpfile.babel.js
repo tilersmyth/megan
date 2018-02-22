@@ -25,10 +25,10 @@ gulp.task('copy', () =>
     .pipe(gulp.dest('dist'))
 );
 
-gulp.task('copy:mail', () => {
-  return gulp.src(paths.mail)
-      .pipe(gulp.dest('dist/server/mail/templates'));
-});
+gulp.task('copy:mail', () =>
+  gulp.src(paths.mail)
+    .pipe(gulp.dest('dist/server/mail/templates'))
+);
 
 // Compile ES6 to ES5 and copy to dist
 gulp.task('babel', () =>

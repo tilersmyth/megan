@@ -43,20 +43,22 @@ export class ForgotComponent {
 
     this.error = {};
 
-    if (!isValid) { return };
+    if (!isValid) { return; }
 
     return this._apollo.mutate({
       mutation: ForgotMutation,
+      /* tslint:disable */
       "variables": {
         "email": model.email
       }
+      /* tslint:enable */
     })
     .subscribe(
-      res => {
+      (res) => {
         this.forgotForm.reset();
         this.confirm = 'Check your email to reset password.';
       },
-      err => {
+      (err) => {
         console.log(err);
       }
     );

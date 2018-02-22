@@ -28,11 +28,10 @@ export class GraphQLModule {
     const http = _httpLink.create({ uri });
 
     const auth = setContext((_, { headers }) => {
-    
-      const token = _jwtService.getToken();
 
-      let header = new HttpHeaders();
-    
+      const token = _jwtService.getToken();
+      const header = new HttpHeaders();
+
       if (!token) {
         return {};
       } else {

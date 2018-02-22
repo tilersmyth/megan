@@ -4,14 +4,12 @@ import User from '../models/user.model';
  * Load current user for GraphQL
  */
 const me = (user) => {
-
   if (user) {
     return User.findById(user);
   }
 
   return null;
-
-}
+};
 
 /**
  * Load user and append to req.

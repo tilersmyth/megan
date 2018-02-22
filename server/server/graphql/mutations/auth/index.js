@@ -5,9 +5,9 @@ import forgot from './forgot';
 import reset from './reset';
 
 export default {
-    login,
-    register,
-    confirm,
-    forgot,
-    reset
+  login,
+  register,
+  confirm,
+  forgot,
+  reset
 };

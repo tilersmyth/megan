@@ -38,7 +38,7 @@ app.use(helmet());
 // enable CORS - Cross Origin Resource Sharing
 app.use(cors());
 
-//GraphQL init
+// GraphQL init
 graph.init(app, bodyParser, config);
 
 // enable detailed API logging in dev env

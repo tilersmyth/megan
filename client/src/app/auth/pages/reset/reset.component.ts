@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from "@angular/router";
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import 'rxjs/add/operator/mergeMap';
 import { Apollo } from 'apollo-angular';
@@ -13,23 +13,20 @@ import { User } from '../../models';
 import { AuthService } from '../../services';
 
 @Component({
-  selector: 'app-reset-password', 
+  selector: 'app-reset-password',
   styleUrls: [ './reset.component.scss' ],
   templateUrl: './reset.component.html'
 })
-export class ResetPasswordComponent implements OnInit{
+export class ResetPasswordComponent implements OnInit, OnDestroy {
 
-  private sub: any;
   public submitted: boolean = false;
   public invalid: string;
-
-  resetForm: FormGroup;
-
-  password = new FormControl('', [Validators.required,
-    Validators.minLength(3)]); 
-
-  passwordConfirm = new FormControl('', [Validators.required,
-    Validators.minLength(3)]); 
+  public resetForm: FormGroup;
+  public password = new FormControl('', [Validators.required,
+    Validators.minLength(3)]);
+  public passwordConfirm = new FormControl('', [Validators.required,
+    Validators.minLength(3)]);
+  private sub: any;
 
   constructor(
     private _router: Router,
@@ -37,64 +34,68 @@ export class ResetPasswordComponent implements OnInit{
     private _apollo: Apollo,
     private _authService: AuthService,
     private _fb: FormBuilder
-  ) { 
+  ) {
     this.resetForm = _fb.group({
       password: this.password,
       passwordConfirm: this.passwordConfirm
-    },{
+    },
+    {
       validator: this.passwordMatch
     });
   }
 
-  passwordMatch(g: FormGroup) {
-    return g.get('password').value === g.get('passwordConfirm').value
-       ? null : { 'mismatch': true };
-  }
-
-  ngOnInit(){
+  public ngOnInit() {
     this.sub = this._activatedRoute.params
       .flatMap((v: any, index: number) => {
         return this._apollo.mutate({
           mutation: ConfirmMutation,
+          /* tslint:disable */
           "variables": {
             "token": v.token
           }
-        })
+          /* tslint:enable */
+        });
       })
       .subscribe(
-        res => {
+        (res) => {
           this._authService.setAuth(res.data.confirm.user, res.data.confirm.token);
 
         },
-        err => {
+        (err) => {
           this.invalid = 'Something went awry. Token is either expired or malformed.';
         }
       );
   }
 
-  ngOnDestroy() {
+  public ngOnDestroy() {
     this.sub.unsubscribe();
   }
 
-  reset(model: User, isValid: boolean) {
+  public reset(model: User, isValid: boolean) {
 
-    if(!isValid) return;
+    if (!isValid) { return; }
 
     return this._apollo.mutate({
       mutation: ResetMutation,
+      /* tslint:disable */
       "variables": {
         "password": model.password
       }
+      /* tslint:enable */
     })
     .subscribe(
-      res => {
+      (res) => {
         this._router.navigateByUrl('/account');
       },
-      err => {
+      (err) => {
         console.log(err);
       }
     );
-    
+  }
+
+  private passwordMatch(g: FormGroup) {
+    return g.get('password').value === g.get('passwordConfirm').value
+       ? null : { mismatch : true };
   }
 
 }

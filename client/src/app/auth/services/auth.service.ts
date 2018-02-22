@@ -21,9 +21,11 @@ import {
 export class AuthService {
 
   private _currentUserSubject = new BehaviorSubject<User>(new User());
+  // tslint:disable-next-line
   public currentUser = this._currentUserSubject.asObservable().distinctUntilChanged();
 
   private _isAuthenticatedSubject = new ReplaySubject<boolean>(1);
+  // tslint:disable-next-line
   public isAuthenticated = this._isAuthenticatedSubject.asObservable();
 
   constructor(
@@ -62,13 +64,15 @@ export class AuthService {
   public signup(user: User) {
     return this.apollo.mutate({
       mutation: SignupMutation,
+      /* tslint:disable */
       variables: {
         "data": {
-          "first_name": user.first_name,
-          "last_name": user.last_name,
+          "firstName": user.firstName,
+          "lastName": user.lastName,
           "email": user.email,
           "password": user.password
         }
+        /* tslint:enable */
       }
     })
     .map(
@@ -83,10 +87,12 @@ export class AuthService {
   public login(user: User) {
     return this.apollo.mutate({
       mutation: LoginMutation,
+      /* tslint:disable */
       "variables": {
         "email": user.email,
         "password": user.password
       }
+      /* tslint:enable */
     })
     .map(
       (res) => {

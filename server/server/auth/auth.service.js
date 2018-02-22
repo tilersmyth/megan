@@ -4,52 +4,43 @@ import jwt from 'jsonwebtoken';
 import config from '../../config/config';
 
 const validateJwt = expressJwt({
-    secret: config.secrets.jwt
+  secret: config.secrets.jwt
 });
 
 /**
  * Authenticate GraphQL endpoint
  */
 const graphAuth = async (req, res, next) => {
+  const token = req.headers.authorization;
 
-    const token = req.headers.authorization;
+  if (!token) {
+    next();
+    return;
+  }
 
-    if(!token){
-        req.user = null;
-        next();
-        return;
-    }
-
-    validateJwt(req, res, next);
-  
-}
+  validateJwt(req, res, next);
+};
 
 /**
  * Return token signed by respective secret
  */
-const signToken = (payload, secret, duration) => {
-
-    return jwt.sign(payload, secret, {
-        expiresIn: duration
-    });
-  
-}
+const signToken = (payload, secret, duration) => (
+  jwt.sign(payload, secret, {
+    expiresIn: duration
+  })
+);
 
 /**
  * Verify signed token
  */
-const verifyToken = (token, secret, done) => {
+const verifyToken = (token, secret, done) => (
+  jwt.verify(token, secret, (err, decoded) => {
+    if (err) {
+      return done(err);
+    }
 
-    return jwt.verify(token, secret, function(err, decoded) {
-
-        if(err){
-            return done(err);
-        }
-
-        return done(null, decoded);
-    });
-  
-}
-
+    return done(null, decoded);
+  })
+);
 
 export default { graphAuth, signToken, verifyToken };

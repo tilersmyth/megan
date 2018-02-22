@@ -6,11 +6,15 @@ import {
   ComponentFixture
 } from '@angular/core/testing';
 
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { Apollo } from 'apollo-angular';
+import { RouterTestingModule } from '@angular/router/testing';
 /**
  * Load the implementations that should be tested
  */
 import { AppComponent } from './app.component';
 import { AppState } from './app.service';
+import { AuthService, JwtService } from './auth';
 
 describe(`App`, () => {
   let comp: AppComponent;
@@ -21,9 +25,10 @@ describe(`App`, () => {
    */
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports: [ HttpClientTestingModule, RouterTestingModule ],
       declarations: [ AppComponent ],
       schemas: [NO_ERRORS_SCHEMA],
-      providers: [AppState]
+      providers: [Apollo, AppState, AuthService, JwtService]
     })
     /**
      * Compile template and css

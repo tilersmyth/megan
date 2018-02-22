@@ -13,44 +13,41 @@ import ctrl from '../controllers';
 
 
 const schema = new GraphQLSchema({
-    query: new GraphQLObjectType({
-      name: 'Query',
-      fields:queries
-    }),
-    mutation: new GraphQLObjectType({
-      name: 'Mutation',
-      fields: mutations
-    })
+  query: new GraphQLObjectType({
+    name: 'Query',
+    fields: queries
+  }),
+  mutation: new GraphQLObjectType({
+    name: 'Mutation',
+    fields: mutations
+  })
 });
 
 function init(_app, bodyParser, config) {
-  
-    //Authenticate endpoint
-    _app.use('/graphql', graphAuth);
-  
-    // GraphiQL, a visual editor for queries
-    _app.use(
-        '/graphiql',
-        graphiqlExpress({
-        endpointURL: '/graphql',
-        }),
-    );
-    
-    // GraphQL setup
-    _app.use(
-        '/graphql',
-        bodyParser.json(),
-        graphqlExpress(req => ({
+  // Authenticate endpoint
+  _app.use('/graphql', graphAuth);
+
+  // GraphiQL, a visual editor for queries
+  _app.use(
+    '/graphiql',
+    graphiqlExpress({
+      endpointURL: '/graphql',
+    }),
+  );
+
+  // GraphQL setup
+  _app.use(
+      '/graphql',
+      bodyParser.json(),
+      graphqlExpress(req => ({
         schema,
         context: {
-            ctrl,
-            config,
-            req
+          ctrl,
+          config,
+          req
         },
-        })),
-    );
-
+      })),
+  );
 }
 
-
-module.exports = {init};
+module.exports = { init };

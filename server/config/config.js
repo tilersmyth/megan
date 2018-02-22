@@ -30,8 +30,9 @@ const envVarsSchema = Joi.object({
     .description('Mail auth: username'),
   MAIL_PASS: Joi.string().required()
     .description('Mail auth: password'),
-  EMAIL_CONFIRMATION: Joi.boolean().required()
-    .description('Require email confirmation for new accounts')  
+  EMAIL_CONFIRMATION: Joi.boolean()
+    .default(true)
+    .description('Require email confirmation for new accounts')
 }).unknown()
   .required();
 
@@ -45,7 +46,7 @@ const config = {
   port: envVars.PORT,
   domain: envVars.DOMAIN,
   mongooseDebug: envVars.MONGOOSE_DEBUG,
-  secrets:{
+  secrets: {
     jwt: envVars.JWT_SECRET,
     confirm: envVars.CONFIRM_SECRET
   },

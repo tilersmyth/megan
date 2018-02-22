@@ -3,11 +3,11 @@
 <form [formGroup]="signupForm" (ngSubmit)="signup(signupForm.value, signupForm.valid)" novalidate>
 
     <div class="form-control">
-        <input placeholder="First name" type="text" name="first_name" formControlName="first_name">
+        <input placeholder="First name" type="text" name="firstName" formControlName="firstName">
     </div>
 
     <div class="form-control">
-        <input placeholder="Last name" type="text" name="last_name" formControlName="last_name">
+        <input placeholder="Last name" type="text" name="lastName" formControlName="lastName">
     </div>
 
     <div class="form-control">
@@ -37,5 +37,5 @@
     <div class="form-control">
         <button type="submit">Sign up</button>
     </div>
-    
+
 </form>

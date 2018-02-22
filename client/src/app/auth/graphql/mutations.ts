@@ -6,8 +6,8 @@ export const SignupMutation = gql`
             auth
             user{
                 id
-                first_name
-                last_name
+                firstName
+                lastName
                 email
                 createdAt
             }
@@ -22,8 +22,8 @@ export const LoginMutation = gql`
             auth
             user{
                 id
-                first_name
-                last_name
+                firstName
+                lastName
                 email
                 createdAt
             }
@@ -38,8 +38,8 @@ export const ConfirmMutation = gql`
             auth
             user{
                 id
-                first_name
-                last_name
+                firstName
+                lastName
                 email
                 createdAt
             }

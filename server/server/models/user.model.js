@@ -1,15 +1,16 @@
-import mongoose, {Schema} from 'mongoose';
+/*eslint-disable*/
+// Fat arrow syntax not supported for model statics/methods/virtuals - no lexical scope
+import mongoose from 'mongoose';
 import crypto from 'crypto';
-mongoose.Promise = require('bluebird');
-
 import config from '../../config/config';
 
+mongoose.Promise = require('bluebird');
 /**
  * User Schema
  */
 const UserSchema = new mongoose.Schema({
-  first_name: String,
-  last_name: String,
+  firstName: String,
+  lastName: String,
   email: {
     type: String,
     lowercase: true,
@@ -23,7 +24,7 @@ const UserSchema = new mongoose.Schema({
   salt: String,
   active: {
     type: Boolean,
-    default: (config.confirm_mail ? false : true)
+    default: !config.confirm_mail
   },
   createdAt: {
     type: Date,
@@ -37,8 +38,8 @@ UserSchema
   .validate(function(value, respond) {
     return this.constructor.findOne({ email: value }).exec()
       .then(user => {
-        if(user) {
-          if(this.id === user.id) {
+        if (user) {
+          if (this.id === user.id) {
             return respond(true);
           }
           return respond(false);
@@ -49,9 +50,9 @@ UserSchema
         throw err;
       });
   }, 'The specified email address is already in use.');
-  
 
-var validatePresenceOf = function(value) {
+
+const validatePresenceOf = function(value) {
   return value && value.length;
 };
 
@@ -61,22 +62,22 @@ var validatePresenceOf = function(value) {
 UserSchema
   .pre('save', function(next) {
     // Handle new/update passwords
-    if(!this.isModified('password')) {
+    if (!this.isModified('password')) {
       return next();
     }
-    
-    if(!validatePresenceOf(this.password)) {
+
+    if (!validatePresenceOf(this.password)) {
       return next(new Error('Invalid password'));
     }
 
     // Make salt with a callback
     this.makeSalt((saltErr, salt) => {
-      if(saltErr) {
+      if (saltErr) {
         return next(saltErr);
       }
       this.salt = salt;
       this.encryptPassword(this.password, (encryptErr, hashedPassword) => {
-        if(encryptErr) {
+        if (encryptErr) {
           return next(encryptErr);
         }
         this.password = hashedPassword;
@@ -99,20 +100,19 @@ UserSchema.methods = {
    * @api public
    */
   authenticate(password, callback) {
-    if(!callback) {
+    if (!callback) {
       return this.password === this.encryptPassword(password);
     }
 
     this.encryptPassword(password, (err, pwdGen) => {
-      if(err) {
+      if (err) {
         return callback(err);
       }
 
-      if(this.password === pwdGen) { 
+      if (this.password === pwdGen) {
         return callback(null, true);
-      } else {
-        return callback(null, false);
       }
+      return callback(null, false);
     });
   },
 
@@ -125,9 +125,9 @@ UserSchema.methods = {
    * @api public
    */
   makeSalt(byteSize, callback) {
-    var defaultByteSize = 16;
+    const defaultByteSize = 16;
 
-    if(typeof arguments[0] === 'function') {
+    if (typeof arguments[0] === 'function') {
       callback = arguments[0];
       byteSize = defaultByteSize;
     } else if(typeof arguments[1] === 'function') {
@@ -136,16 +136,15 @@ UserSchema.methods = {
       throw new Error('Missing Callback');
     }
 
-    if(!byteSize) {
+    if (!byteSize) {
       byteSize = defaultByteSize;
     }
 
     return crypto.randomBytes(byteSize, (err, salt) => {
-      if(err) {
+      if (err) {
         return callback(err);
-      } else {
-        return callback(null, salt.toString('base64'));
       }
+      return callback(null, salt.toString('base64'));
     });
   },
 
@@ -158,34 +157,30 @@ UserSchema.methods = {
    * @api public
    */
   encryptPassword(password, callback) {
-    if(!password || !this.salt) {
-      if(!callback) {
+    if (!password || !this.salt) {
+      if (!callback) {
         return null;
-      } else {
-        return callback('Missing password or salt');
       }
+      return callback('Missing password or salt');
     }
 
-    var defaultIterations = 10000;
-    var defaultKeyLength = 64;
-    var salt = new Buffer(this.salt, 'base64');
+    const defaultIterations = 10000;
+    const defaultKeyLength = 64;
+    const salt = new Buffer(this.salt, 'base64');
 
-    if(!callback) {
+    if (!callback) {
       return crypto.pbkdf2Sync(password, salt, defaultIterations, defaultKeyLength, 'sha256')
         .toString('base64');
     }
 
     return crypto.pbkdf2(password, salt, defaultIterations, defaultKeyLength, 'sha256', (err, key) => {
-      if(err) {
+      if (err) {
         return callback(err);
-      } else {
-        return callback(null, key.toString('base64'));
       }
+      return callback(null, key.toString('base64'));
     });
   }
 };
-
-
 
 /**
  * @typedef User

@@ -1,31 +1,26 @@
 import { Component } from '@angular/core';
-import {Router} from "@angular/router";
+import { Router } from '@angular/router';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 
 import { User } from '../../models';
 import { AuthService } from '../../services';
 
 @Component({
-  selector: 'app-signup', 
+  selector: 'app-signup',
   styleUrls: [ './signup.component.scss' ],
   templateUrl: './signup.component.html'
 })
 export class SignupComponent {
 
-  signupForm: FormGroup;
-
-  first_name = new FormControl('', [Validators.required]);
-    
-  last_name = new FormControl('', [Validators.required]);
-
-  email = new FormControl('', [Validators.required,
+  public signupForm: FormGroup;
+  public firstName = new FormControl('', [Validators.required]);
+  public lastName = new FormControl('', [Validators.required]);
+  public email = new FormControl('', [Validators.required,
     Validators.email]);
-
-  password = new FormControl('', [Validators.required,
-    Validators.minLength(3)]); 
-
-  passwordConfirm = new FormControl('', [Validators.required,
-    Validators.minLength(3)]);   
+  public password = new FormControl('', [Validators.required,
+    Validators.minLength(3)]);
+  public passwordConfirm = new FormControl('', [Validators.required,
+    Validators.minLength(3)]);
 
   public submitted: boolean = false;
   public error: any = {};
@@ -35,35 +30,31 @@ export class SignupComponent {
     private _router: Router,
     private _fb: FormBuilder,
     private _authService: AuthService
-  ) { 
+  ) {
 
     this.signupForm = _fb.group({
-      first_name: this.first_name,
-      last_name: this.last_name,
+      firstName: this.firstName,
+      lastName: this.lastName,
       email: this.email,
       password: this.password,
       passwordConfirm: this.passwordConfirm
-    },{
+    },
+    {
       validator: this.passwordMatch
     });
 
   }
 
-  passwordMatch(g: FormGroup) {
-    return g.get('password').value === g.get('passwordConfirm').value
-       ? null : { 'mismatch': true };
-  }
-
-  signup(model: User, isValid: boolean) {
+  public signup(model: User, isValid: boolean) {
 
     this.error = {};
 
-    if(!isValid) return;
+    if (!isValid) { return; }
 
     this._authService.signup(model).subscribe(
       (auth) => {
 
-        if(!auth){
+        if (!auth) {
           this.signupForm.reset();
           this.confirm = 'Check your email to activate this account!';
           return;
@@ -75,7 +66,11 @@ export class SignupComponent {
         this.error = err.graphQLErrors[0];
       }
     );
-    
+  }
+
+  private passwordMatch(g: FormGroup) {
+    return g.get('password').value === g.get('passwordConfirm').value
+       ? null : { mismatch : true };
   }
 
 }

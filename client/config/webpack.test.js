@@ -81,7 +81,9 @@ module.exports = function (options) {
              * These packages have problems with their sourcemaps
              */
             helpers.root('node_modules/rxjs'),
-            helpers.root('node_modules/@angular')
+            helpers.root('node_modules/@angular'),
+            helpers.root('node_modules/apollo-angular'),
+            helpers.root('node_modules/apollo-client')
           ]
         },
 
@@ -211,7 +213,7 @@ module.exports = function (options) {
         /**
          * The (\\|\/) piece accounts for path separators in *nix and Windows
          */
-        /angular(\\|\/)core(\\|\/)@angular/,
+        /angular(\\|\/)core(\\|\/)/,
         helpers.root('src'), // location of your src
         {
           /**
